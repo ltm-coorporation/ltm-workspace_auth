@@ -62,15 +62,11 @@ class CouchDBHandler{
 
         const options = {
             hostname: 'localhost',
-            port: this.port,            
+            port: this.port,
             auth: this.auth,
             method: this.method,
             path: this.path,
-            header: {
-                'Content-Type': 'application/json',
-                // 'Content-Length': Buffer.byteLength(postData),
-                'Referer': 'http://127.0.0.1/'
-            }
+            header: { 'Content-Type': 'application/json' }
         };
 
         
@@ -84,16 +80,24 @@ class CouchDBHandler{
 
 
                 res.on('end', () => {
-                    let Obj = {}
+                    let Obj = {};
 
                     Obj.body = (data.length > 0) ? JSON.parse(data) : {};
-                    Obj.statusCode = res.statusCode;
+                    Obj.statusCode = res.statusCode;                    
+                    
+                    if(res.statusCode == 409) reject({ statusCode: res.statusCode, message: Obj.body.error });
                     return resolve(Obj);
                 })
             });
             
             httpReq.on('error', (e) => {
-                reject(e);
+                let err = {};
+                switch(e.code){
+                    case 'ECONNREFUSED': err.statusCode = 502; err.message = e.message; break;
+                    default : err.statusCode = 500; err.message = e.message;
+                }
+
+                return reject(err);
             });
             
             
