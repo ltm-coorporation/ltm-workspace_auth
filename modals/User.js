@@ -15,20 +15,34 @@ class User {
         let userObj = {};
         userObj.action = reqObj.action;
 
-        return new Promise((resolve, reject) => {   
-            userObj.username = reqObj.body.username;
-            userObj.password = reqObj.body.password;
-            
-            
-            
-            userObj.profile = reqObj.body.profile || {};
-            userObj.config = reqObj.body.config || {};
+        // return new Promise((resolve, reject) => {   
+        userObj.username = reqObj.body.username;
+        userObj.password = reqObj.body.password;
+        
+        
+        
+        userObj.profile = reqObj.body.profile || {};
+        userObj.config = reqObj.body.config || {};
 
-            let couchdbHandler = new CouchDBHandler();
+        let authObj = { 
+            username: userObj.username, 
+            password: userObj.password
+        };
 
-            return couchdbHandler.get()
-            return resolve(userObj);
-        });
+        
+        return this.verify(authObj)
+            .then(res => {
+
+                let dbHandler = new DBHandler();
+                switch(res){
+                    case 'authenticated' : {
+                        return dbHandler.updateDBUserData();
+                    }
+                    case 'unauthenticated' : {
+                        return dbHandler.createDBUser(userObj);
+                    }
+                } 
+            });
     }
 
     verify(authObj){

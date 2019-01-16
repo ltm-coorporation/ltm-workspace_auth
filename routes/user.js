@@ -26,7 +26,8 @@ function actionMethods(req, res){
                 case 'update': return user.upsert(result).then(doc => { return {doc}; }); break;
                 case 'info'  : return user.getInfo(result).then(doc => { return {doc}; }); break;
 
-                case 'verify': return user.verify(result.body).then(doc => { return { auth: doc, result}; }); break;                
+                // case 'verify': return user.verify(result.body).then(doc => { return { auth: doc, result}; }); break;
+                case 'verify': return user.verify(result.body).then(doc => { return { auth: doc}; }); break;
                 default: throw { statusCode: 404, message: 'Contact Docs for routes info.'}
             }    
         })
