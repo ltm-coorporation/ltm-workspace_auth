@@ -1,6 +1,7 @@
 
 
 let { ApiKeyBuilder } = require('../components/ApiKeyBuilder');
+let DBRequestHandler = require('../components/DBHandler');
 
 class SyncAuth {
     
@@ -8,6 +9,7 @@ class SyncAuth {
 
     
     getKey(){
+        
         let apiKey = 'fetchedFromDb';
         let apiKeyBuilder = new ApiKeyBuilder();
         // return new Promise((resolve, reject) => resolve(apiKey));
