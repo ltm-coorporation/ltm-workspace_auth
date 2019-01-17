@@ -5,7 +5,11 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "test": "mocha --recursive src/**/*.test.js --watch"
+    
+
+
+    "test": "mocha --recursive src/**/*.test.js --exit",
+    "test-local": "mocha --recursive src/**/*.test.js --watch"
   },
   "keywords": [],
   "author": "prashant dawar",
