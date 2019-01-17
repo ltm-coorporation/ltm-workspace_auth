@@ -3,7 +3,7 @@ dist: trusty
 addons:
   apt:
     packages:
-      - couchdb
+    - couchdb
 
 
 
@@ -12,5 +12,6 @@ language: node_js
 node_js:
   - "7"
 env:
+  global:
   - COUCHDB_AUTH='couchdbadmin:password'
   - COUCHDB_PORT=5984
