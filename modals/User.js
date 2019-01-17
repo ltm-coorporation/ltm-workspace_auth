@@ -3,9 +3,7 @@
 let { DBHandler } = require('../components/DBHandler');
 
 class User {
-    constructor(){
-        this.body = {};
-    }
+    constructor(){}
 
     
     
