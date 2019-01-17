@@ -2,10 +2,10 @@
   "name": "ltm-app_auth",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "dev": "nodemon src/app.js",
+    "test": "mocha --recursive src/**/*.test.js --watch"
   },
   "keywords": [],
   "author": "prashant dawar",
