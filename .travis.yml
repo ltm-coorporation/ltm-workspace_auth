@@ -1,8 +1,13 @@
 
-language: node_js
-node_js:
-  - "7"
+dist: trusty
 addons:
   apt:
     packages:
       - couchdb
+
+
+
+
+language: node_js
+node_js:
+  - "7"

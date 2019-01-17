@@ -2,12 +2,23 @@
   "name": "ltm-app_auth",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "prashant dawar",
+  "license": "ISC",
+  "cpu" : [ "x64", "ia32" ],
+  "os" : [ "darwin", "linux", "win32", "win64" ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ltm-coorporation/ltm-workspace_auth.git"
+  },
+  "homepage": "https://github.com/ltm-coorporation/ltm-workspace_auth#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
 }
