@@ -13,7 +13,6 @@ node_js:
   - "7"
 env:
   global:
-  - COUCHDB_AUTH="couchdbadmin:password"  
   - COUCHDB_PORT=5984
 
 services:
