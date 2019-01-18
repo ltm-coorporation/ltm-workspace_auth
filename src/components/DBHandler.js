@@ -6,34 +6,26 @@ class CouchDBHandler{
         this.method = 'GET';
         this.port = process.env.COUCHDB_PORT;
         this.auth = process.env.COUCHDB_AUTH;
+
+
+        this.headers = { "Content-Type": "application/json" };
     }
 
-    httpmethod(...args){ this.method = args[0] || 'GET'; return this;  }
+    httpMethod(...args){ this.method = args[0] || 'GET'; return this;  }
 
-    action(actionName){
-
-        switch(actionName){
-            case '_all_docs': this.path = '_all_docs';
-        }
-        return this;
-    }
-        
+    httpHeaders(key, value){ this.headers[`"${key}"`] = `"${value}`; return this; }
 
     authUser(authObj){ this.auth = `${authObj.username}:${authObj.password}`; return this; }
-
+    
     reqPath(path){  this.path = path; return this; }
 
-
-
-    verify(authObj){
-
+    verify(authObj){        
         
         this.authUser(authObj)
-        .httpmethod('HEAD')
-        .reqPath(`/_users/org.couchdb.user:${authObj.username}`)
+        .httpMethod('HEAD')
+        .reqPath(`/_users/org.couchdb.user:${authObj.username}`);        
         
-        return this.execute();
-        
+        return this.execute();        
     }
 
     updateDBUserData(postData){        
@@ -49,12 +41,34 @@ class CouchDBHandler{
         dataObj.password = userObj.password;        
         dataObj.type = "user";
         dataObj.roles = [];
-        this.httpmethod('PUT')
+        this.httpMethod('PUT')
             .reqPath(`/_users/org.couchdb.user:${userObj.username}`)
 
         // creating new user require db admin credentials
         return this.execute(dataObj);
     }
+
+    deleteDBUser(userObj){
+        let dataObj = {};
+
+        dataObj.name = userObj.username;
+        dataObj.password = userObj.password;
+
+        this.httpMethod('GET')
+            .reqPath(`/_users/org.couchdb.user:${userObj.username}`)
+        // console.log(dataObj);
+        return this.execute(dataObj)
+                .then(res => {
+                    let rev = res.body._rev;                                      
+                    this.httpMethod('DELETE')
+                        .reqPath(`/_users/org.couchdb.user:${userObj.username}?rev=${rev}`)
+                        // .httpHeaders("If-Match", rev);
+                    
+                    return this.execute(dataObj);
+                });
+    }
+
+
 
     execute(dataObj = {}){
         
@@ -66,10 +80,8 @@ class CouchDBHandler{
             auth: this.auth,
             method: this.method,
             path: this.path,
-            header: { 'Content-Type': 'application/json' }
+            header: this.headers
         };
-
-        
         
         return new Promise((resolve, reject) => {
             let httpReq = http.request(options, (res) => {
@@ -81,7 +93,7 @@ class CouchDBHandler{
 
                 res.on('end', () => {
                     let Obj = {};
-
+                    // console.log(data)
                     Obj.body = (data.length > 0) ? JSON.parse(data) : {};
                     Obj.statusCode = res.statusCode;                    
                     

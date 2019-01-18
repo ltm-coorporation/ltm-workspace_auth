@@ -9,7 +9,7 @@
 
 
     "test": "mocha --recursive src/**/*.test.js --exit",
-    "test-local": "mocha --recursive src/**/*.test.js --watch"
+    "test-local": "mocha --recursive test/**/*.test.js --watch"
   },
   "keywords": [],
   "author": "prashant dawar",
