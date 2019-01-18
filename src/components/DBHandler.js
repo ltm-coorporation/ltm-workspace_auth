@@ -15,57 +15,88 @@ class CouchDBHandler{
 
     httpHeaders(key, value){ this.headers[`"${key}"`] = `"${value}`; return this; }
 
-    authUser(authObj){ this.auth = `${authObj.username}:${authObj.password}`; return this; }
+    authUser(dataObj){ this.auth = `${dataObj.name}:${dataObj.password}`; return this; }
     
     reqPath(path){  this.path = path; return this; }
 
-    verify(authObj){        
+    verifyDBUser(authObj){        
         
-        this.authUser(authObj)
-        .httpMethod('HEAD')
-        .reqPath(`/_users/org.couchdb.user:${authObj.username}`);        
+        let dataObj = this.prepareDataObj(authObj);
+
+        this.authUser(dataObj);
+
+        this.httpMethod('HEAD')
+        .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
         
         return this.execute();        
     }
 
-    updateDBUserData(postData){        
-        this.method = 'POST';
-        return 
+    updateDBUser(userObj){
+
+        let dataObj = this.prepareDataObj(userObj);
+
+        this.authUser(dataObj);
+
+        this.httpMethod('GET')
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`)
+        
+        
+        return this.execute()
+        .then(res => {
+            let rev = res.body._rev;
+
+            // this.authUser(dataObj)
+            this.httpMethod('PUT')
+                .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`);
+
+            return this.execute(dataObj);
+        });
     }
 
-    createDBUser(userObj){
+    prepareDataObj(userObj){
         let dataObj = {}
-        // Object.assign(dataObj, userObj);
-
         dataObj.name = userObj.username;
         dataObj.password = userObj.password;        
         dataObj.type = "user";
         dataObj.roles = [];
+        dataObj.profile = userObj.profile || {};
+        dataObj.config = userObj.config || {};
+
+        return  dataObj;
+    }
+
+    createDBUser(userObj){
+        
+        let dataObj = this.prepareDataObj(userObj);
+        
         this.httpMethod('PUT')
-            .reqPath(`/_users/org.couchdb.user:${userObj.username}`)
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);
 
         // creating new user require db admin credentials
         return this.execute(dataObj);
     }
 
+    
+    
+    
     deleteDBUser(userObj){
-        let dataObj = {};
+        let dataObj = this.prepareDataObj(userObj);
 
-        dataObj.name = userObj.username;
-        dataObj.password = userObj.password;
-
+        this.authUser(dataObj);
+        
         this.httpMethod('GET')
-            .reqPath(`/_users/org.couchdb.user:${userObj.username}`)
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`)
         // console.log(dataObj);
         return this.execute(dataObj)
-                .then(res => {
-                    let rev = res.body._rev;                                      
-                    this.httpMethod('DELETE')
-                        .reqPath(`/_users/org.couchdb.user:${userObj.username}?rev=${rev}`)
-                        // .httpHeaders("If-Match", rev);
-                    
-                    return this.execute(dataObj);
-                });
+        .then(res => {
+            let rev = res.body._rev;
+            
+            this.httpMethod('DELETE')
+                .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`)
+                // .httpHeaders("If-Match", rev);
+            
+            return this.execute();
+        });
     }
 
 
