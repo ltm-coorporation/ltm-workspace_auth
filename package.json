@@ -8,7 +8,7 @@
     
 
 
-    "test": "mocha --recursive src/**/*.test.js --exit",
+    "test": "mocha --recursive test/**/*.test.js --exit",
     "test-local": "mocha --recursive test/**/*.test.js --watch"
   },
   "keywords": [],
