@@ -26,7 +26,7 @@ class CouchDBHandler{
         this.authUser(dataObj);
 
         this.httpMethod('HEAD')
-        .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
         
         return this.execute();        
     }
@@ -65,10 +65,8 @@ class CouchDBHandler{
         return  dataObj;
     }
 
-    createDBUser(userObj){
-        
-        let dataObj = this.prepareDataObj(userObj);
-        
+    createDBUser(userObj){        
+        let dataObj = this.prepareDataObj(userObj);        
         this.httpMethod('PUT')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);
 
@@ -76,25 +74,17 @@ class CouchDBHandler{
         return this.execute(dataObj);
     }
 
-    
-    
-    
     deleteDBUser(userObj){
         let dataObj = this.prepareDataObj(userObj);
-
-        this.authUser(dataObj);
-        
+        this.authUser(dataObj);        
         this.httpMethod('GET')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`)
         // console.log(dataObj);
         return this.execute(dataObj)
         .then(res => {
-            let rev = res.body._rev;
-            
+            let rev = res.body._rev;            
             this.httpMethod('DELETE')
-                .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`)
-                // .httpHeaders("If-Match", rev);
-            
+                .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`);
             return this.execute();
         });
     }
