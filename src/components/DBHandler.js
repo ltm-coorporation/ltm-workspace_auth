@@ -3,15 +3,11 @@ const http = require('http');
 const qs = require('querystring');
 class CouchDBHandler{
     constructor(){
-        this.reset();    
-    }
-
-    
-    
-    reset(){
         this.method = 'GET';
         this.port = process.env.COUCHDB_PORT;
         this.auth = process.env.COUCHDB_AUTH;
+        
+        
         this.headers = { "Content-Type": "application/json" };
     }
 
@@ -142,8 +138,7 @@ class CouchDBHandler{
             
             
             httpReq.write(bodyData);
-            httpReq.end();
-            this.reset();
+            httpReq.end();        
         });
     }
 }
