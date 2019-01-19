@@ -50,21 +50,27 @@ describe('-- DBHandler class methods --', function(){
         describe('#for correct username and password of existing user.', function(){
             it('should return statusCode = 200 (Success)(OK)', function(){                
                 return verify(authObj)
-                .then(res => expect(res.statusCode).to.equal(200));                
+                .then(res => {                    
+                    return expect(res.statusCode).to.equal(200); 
+                });
             });
         });
 
         describe('#for incorrect username and password of existing user.', function(){
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
                 return verify(authObjModified)
-                .then(res => expect(res.statusCode).to.equal(401));
+                .catch(res => {
+                    return expect(res.statusCode).to.equal(401)
+                });
             });
         });
 
         describe('#for non-existing user', function(){            
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
                 return verify(authObjNew)
-                .then(res => expect(res.statusCode).to.equal(401));
+                .catch(res => {
+                    return expect(res.statusCode).to.equal(401); 
+                });
             });
         });
     });
@@ -92,7 +98,7 @@ describe('-- DBHandler class methods --', function(){
         describe('#for incorrect username and password of existing user.', function(){
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
                 return update(authObjModified)
-                .then(res => {
+                .catch(res => {
                     return expect(res.statusCode).to.equal(401) 
                 });
             });
@@ -102,7 +108,7 @@ describe('-- DBHandler class methods --', function(){
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
                 
                 return update(authObjNew)
-                .then(res => {
+                .catch(res => {
                     return expect(res.statusCode).to.equal(401)
                 });
             });

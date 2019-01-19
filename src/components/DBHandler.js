@@ -3,11 +3,15 @@ const http = require('http');
 const qs = require('querystring');
 class CouchDBHandler{
     constructor(){
+        this.reset();    
+    }
+
+    
+    
+    reset(){
         this.method = 'GET';
         this.port = process.env.COUCHDB_PORT;
         this.auth = process.env.COUCHDB_AUTH;
-
-
         this.headers = { "Content-Type": "application/json" };
     }
 
@@ -118,7 +122,10 @@ class CouchDBHandler{
                     Obj.body = (data.length > 0) ? JSON.parse(data) : {};
                     Obj.statusCode = res.statusCode;                    
                     
-                    if(res.statusCode == 409) reject({ statusCode: res.statusCode, message: Obj.body.error });
+                    switch(res.statusCode){
+                        case 401 : 
+                        case 409 : reject({ statusCode: res.statusCode, message: Obj.body.error }); break;
+                    }
                     return resolve(Obj);
                 })
             });
@@ -136,6 +143,7 @@ class CouchDBHandler{
             
             httpReq.write(bodyData);
             httpReq.end();
+            this.reset();
         });
     }
 }

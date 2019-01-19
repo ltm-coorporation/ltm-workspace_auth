@@ -28,9 +28,10 @@ class User {
         };
 
         
+        
+        
         return this.verify(authObj)
             .then(res => {
-
                 let dbHandler = new DBHandler();
                 switch(res){
                     case 'authenticated' : {
@@ -39,15 +40,12 @@ class User {
                     case 'unauthenticated' : {
                         return dbHandler.createDBUser(userObj);
                     }
-                } 
+                }
             });
     }
 
     verify(authObj){
         let dbHandler = new DBHandler();
-
-        
-        
         return dbHandler.verify(authObj.username, authObj.password)
             .then(res => (res.statusCode != 200) ? 'unauthenticated' : 'authenticated');        
     }
@@ -55,10 +53,10 @@ class User {
 
     getInfo(){
         let userDoc = {};
-        userDoc.profile  = {};        
+        userDoc.profile  = {};
 
         return userDoc;
     }
 }
 
-module.exports = {User};
+module.exports = { User };
