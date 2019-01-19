@@ -105,7 +105,7 @@ class CouchDBHandler{
             auth: this.auth,
             method: this.method,
             path: this.path,
-            header: this.headers
+            headers: this.headers
         };
         
         return new Promise((resolve, reject) => {
