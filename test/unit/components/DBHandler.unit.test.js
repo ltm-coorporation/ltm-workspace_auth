@@ -9,7 +9,7 @@ let authObj = { username: 'tesuser', password: 'testpassword' };
 
 
 /**
- * Here deleting and creating user are tested in before and after.
+ * Here creating and deleting user are tested in before and after respectively.
  */
 before('for db operations',function() {
     // this.timeout(3000);
@@ -34,6 +34,7 @@ after('for db operations',function() {
         });
     // });
 });
+
 
 describe('-- DBHandler class methods --', function(){
     
@@ -85,6 +86,9 @@ describe('-- DBHandler class methods --', function(){
             });
         });
 
+        
+        
+        
         describe('#for incorrect username and password of existing user.', function(){
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
                 return update(authObjModified)
