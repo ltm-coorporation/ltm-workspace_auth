@@ -136,9 +136,6 @@ class CouchDBHandler{
             
             httpReq.write(bodyData);
             httpReq.end();
-
-            this.path = '';
-            this.method = '';
         });
     }
 }
