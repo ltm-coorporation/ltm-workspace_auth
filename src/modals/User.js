@@ -7,56 +7,62 @@ class User {
 
     
     
-    
-    
+        
     upsert(reqObj){        
-        let userObj = {};
-        userObj.action = reqObj.action;
-
-        // return new Promise((resolve, reject) => {   
-        userObj.username = reqObj.body.username;
-        userObj.password = reqObj.body.password;
+        let userObj = this.prepareUserObj(reqObj);
+        let dbHandler = new DBHandler();
         
-        
-        
-        userObj.profile = reqObj.body.profile || {};
-        userObj.config = reqObj.body.config || {};
-
-        let authObj = { 
-            username: userObj.username, 
-            password: userObj.password
-        };
-
-        
-        
-        
-        return this.verify(authObj)
+        return this.verify(reqObj)
             .then(res => {
-                let dbHandler = new DBHandler();
-                switch(res){
-                    case 'authenticated' : {
-                        return dbHandler.updateDBUserData();
-                    }
-                    case 'unauthenticated' : {
-                        return dbHandler.createDBUser(userObj);
-                    }
+                
+                if(res.statusCode == 200){
+                    return dbHandler.updateDBUser(userObj);
                 }
+                return res;
+            })
+
+            .catch(err => {
+                if(err.statusCode == 401) { 
+                    return dbHandler.createDBUser(userObj) 
+                };
+                return err;
             });
     }
 
-    verify(authObj){
+    verify(reqObj){
+    
+        let userObj = this.prepareUserObj(reqObj);
         let dbHandler = new DBHandler();
-        return dbHandler.verify(authObj.username, authObj.password)
-            .then(res => (res.statusCode != 200) ? 'unauthenticated' : 'authenticated');        
+        return dbHandler.verifyDBUser(userObj);
+            // .then(res => (res.statusCode != 200) ? 'unauthenticated' : 'authenticated');       
     }
 
+    
+    getInfo(reqObj){
+        let userObj = this.prepareUserObj(reqObj);
 
-    getInfo(){
-        let userDoc = {};
-        userDoc.profile  = {};
+        
+        let dbHandler = new DBHandler();
+        return dbHandler.getDBUser(userObj)
+                .then(res => {
+                        delete res.body._id;
+                        delete res.body._rev;
+                        delete res.body.password_scheme;
+                        delete res.body.iterations;
+                        delete res.body.derived_key;
+                        delete res.body.salt;
+                    return res;
+                })
+    }
 
-        return userDoc;
+    prepareUserObj(reqObj){
+        let userDataObj = {};
+        userDataObj.action = reqObj.action;
+        userDataObj.username = reqObj.body.username;
+        userDataObj.password = reqObj.body.password;
+        userDataObj.profile = reqObj.body.profile || {};
+        userDataObj.config = reqObj.body.config || {};
+        return userDataObj;
     }
 }
-
 module.exports = { User };

@@ -36,11 +36,9 @@ after('for db operations',function() {
 });
 
 
-describe('-- DBHandler class methods --', function(){
-    
+describe('-- DBHandler class methods --', function(){    
     let authObjModified = { username: authObj.username, password: 'password'};
     let authObjNew = { username: 'username', password: 'password' };
-
 
     describe('-- verify User() --', function(){
         function verify(authObj){
@@ -80,9 +78,6 @@ describe('-- DBHandler class methods --', function(){
             return dbHandler.updateDBUser(authObj)
         }
 
-        
-        
-        
         describe('#for correct username and password of existing user.', function(){
             it('should return statusCode = 201 (Success)(Created)', function(){
                 return update(authObj)
@@ -92,8 +87,6 @@ describe('-- DBHandler class methods --', function(){
             });
         });
 
-        
-        
         
         describe('#for incorrect username and password of existing user.', function(){
             it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){

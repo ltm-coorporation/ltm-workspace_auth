@@ -19,15 +19,25 @@ class CouchDBHandler{
     
     reqPath(path){  this.path = path; return this; }
 
-    verifyDBUser(authObj){        
+    verifyDBUser(userObj){        
         
-        let dataObj = this.prepareDataObj(authObj);
+        let dataObj = this.prepareDataObj(userObj);
 
         this.authUser(dataObj);
 
         this.httpMethod('HEAD')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
         
+        return this.execute();        
+    }
+
+    getDBUser(userObj){
+        let dataObj = this.prepareDataObj(userObj);
+        
+        this.authUser(dataObj);
+        
+        this.httpMethod('GET')
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
         return this.execute();        
     }
 
@@ -120,7 +130,7 @@ class CouchDBHandler{
                     
                     switch(res.statusCode){
                         case 401 : 
-                        case 409 : reject({ statusCode: res.statusCode, message: Obj.body.error }); break;
+                        case 409 : return reject({ statusCode: res.statusCode, message: Obj.body.error }); break;
                     }
                     return resolve(Obj);
                 })
