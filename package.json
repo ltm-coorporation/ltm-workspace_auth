@@ -6,23 +6,30 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
-
-
     "test": "mocha --recursive test/**/*.test.js --exit",
     "test-local": "mocha --recursive test/**/*.test.js --watch"
   },
   "keywords": [],
   "author": "prashant dawar",
   "license": "ISC",
-  "cpu" : [ "x64", "ia32" ],
-  "os" : [ "darwin", "linux", "win32", "win64" ],
+  "cpu": [
+    "x64",
+    "ia32"
+  ],
+  "os": [
+    "darwin",
+    "linux",
+    "win32",
+    "win64"
+  ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/ltm-coorporation/ltm-workspace_auth.git"
+    "type": "git",
+    "url": "https://github.com/ltm-coorporation/ltm-workspace_auth.git"
   },
   "homepage": "https://github.com/ltm-coorporation/ltm-workspace_auth#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
     "mocha": "^5.2.0"
   }
 }

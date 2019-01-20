@@ -37,7 +37,7 @@ function router(req, res){
         res.write(JSON.stringify(resObj));
     })
     .catch(err => {
-        console.log(err);
+        // console.log(err);
         err.status = 'Error Occured';
         res.statusCode = err.statusCode || 500;
         res.write(JSON.stringify(err));

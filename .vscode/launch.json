@@ -27,6 +27,7 @@
                 "--recursive",
                 "--no-timeouts",
                 "--colors",
+                "--exit",
                 "${workspaceFolder}/test/**/*.test.js"
             ],            
             

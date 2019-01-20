@@ -8,20 +8,19 @@ let deleteUser = require('../../config/deleteDBUser.test');
 
 
 
-/**
- * Here creating and deleting user are tested in before and after respectively.
- */
-before('for db operations',function() {
-    console.log(`-- before all test in ${__filename.slice(__dirname.length + 1)} file --` );
-    return createUser();
-});
+describe('-- DBHandler class methods --', function(){
+    /**
+     * Here creating and deleting user are tested in before and after respectively.
+     */
+    before('for db operations',function() {
+        console.log(`-- before all test in ${__filename.slice(__dirname.length + 1)} file --` );
+        return createUser();
+    });
 
-after('for db operations',function() {
-    console.log(`-- after all test in ${__filename.slice(__dirname.length + 1)} file --` );    
-    return deleteUser();
-});
-
-describe('-- DBHandler class methods --', function(){    
+    after('for db operations',function() {
+        console.log(`-- after all test in ${__filename.slice(__dirname.length + 1)} file --` );    
+        return deleteUser();
+    });
     let authObjModified = { username: authObj.username, password: 'password'};
     let authObjNew = { username: 'username', password: 'password' };
 
@@ -83,8 +82,7 @@ describe('-- DBHandler class methods --', function(){
         });
 
         describe('#for non-existing user', function(){            
-            it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){
-                
+            it('should return statusCode == 401 (Client Error)(Unauthorized)', function(){                
                 return update(authObjNew)
                 .catch(res => {
                     return expect(res.statusCode).to.equal(401)

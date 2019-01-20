@@ -50,7 +50,6 @@ class CouchDBHandler{
         this.httpMethod('GET')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`)
         
-        
         return this.execute()
         .then(res => {
             let rev = res.body._rev;
@@ -99,8 +98,6 @@ class CouchDBHandler{
         });
     }
 
-
-
     execute(dataObj = {}){
         
         let bodyData = JSON.stringify(dataObj);
@@ -120,7 +117,6 @@ class CouchDBHandler{
                
                 let data = '';            
                 res.on('data', (chunk) => data += chunk);
-
 
                 res.on('end', () => {
                     let Obj = {};
@@ -145,7 +141,6 @@ class CouchDBHandler{
 
                 return reject(err);
             });
-            
             
             httpReq.write(bodyData);
             httpReq.end();        
