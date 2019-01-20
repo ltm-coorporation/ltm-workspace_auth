@@ -1,10 +1,10 @@
 
 let expect = require('chai').expect;
 let { DBHandler } = require('../../../src/components/DBHandler');
+let authObj = require('../../config/authDBUser');
 let dbHandler = new DBHandler();
-let authObj = { username: 'tesuser', password: 'testpassword' };
-
-
+let createUser = require('../../config/createDBUser.test');
+let deleteUser = require('../../config/deleteDBUser.test');
 
 
 
@@ -12,29 +12,14 @@ let authObj = { username: 'tesuser', password: 'testpassword' };
  * Here creating and deleting user are tested in before and after respectively.
  */
 before('for db operations',function() {
-    // this.timeout(3000);
     console.log(`-- before all test in ${__filename.slice(__dirname.length + 1)} file --` );
-    // it('created test db user with return statusCode == 201 (Success)(Created)', function(){
-        
-        return dbHandler.createDBUser(authObj)
-        .then(res => {
-            return expect(res.statusCode).to.equal(201);
-        });
-
-    // });
+    return createUser();
 });
 
-after('for db operations',function() {    
-    console.log(`-- after all test in ${__filename.slice(__dirname.length + 1)} file --` );
-    // it('deleted test db user with return statusCode == 200 (Success)(OK)', function(){
-        return dbHandler.deleteDBUser(authObj)
-        .then(res => {
-            
-            return expect(res.statusCode).to.equal(200);
-        });
-    // });
+after('for db operations',function() {
+    console.log(`-- after all test in ${__filename.slice(__dirname.length + 1)} file --` );    
+    return deleteUser();
 });
-
 
 describe('-- DBHandler class methods --', function(){    
     let authObjModified = { username: authObj.username, password: 'password'};
