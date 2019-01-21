@@ -9,6 +9,7 @@ class CouchDBHandler{
         
         
         this.headers = { "Content-Type": "application/json" };
+        this.hostname = process.env.COUCHDB_HOST;
     }
 
     httpMethod(...args){ this.method = args[0] || 'GET'; return this;  }
@@ -175,7 +176,7 @@ class CouchDBHandler{
         let bodyData = JSON.stringify(dataObj);
 
         const options = {
-            hostname: 'localhost',
+            hostname: this.hostname,
             port: this.port,
             auth: this.auth,
             method: this.method,

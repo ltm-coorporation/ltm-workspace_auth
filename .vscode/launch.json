@@ -11,7 +11,8 @@
             "program": "${workspaceFolder}/src/app.js",
             "env" : {
                 "COUCHDB_AUTH": "couchdbadmin:password",
-                "COUCHDB_PORT" : "5984"
+                "COUCHDB_PORT" : "5984",
+                "COUCHDB_HOST" : "localhost"
             }
         },
         {
@@ -34,7 +35,8 @@
             "internalConsoleOptions": "openOnSessionStart",
             "env": {
                 "COUCHDB_AUTH": "couchdbadmin:password",
-                "COUCHDB_PORT": "5984"
+                "COUCHDB_PORT": "5984",
+                "COUCHDB_HOST" : "localhost"
             }
         }
     ]

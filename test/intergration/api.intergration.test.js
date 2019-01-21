@@ -15,6 +15,7 @@ let deleteUser = require('../config/deleteDBUser.test');
 
 chai.use(chaiHttp);
 let app = require('../../src/app');
+// let hostname = `http://${process.env.COUCHDB_HOST}:3000`;
 let requester = chai.request(app).keepOpen();
 
 describe("===================== INTEGRATION TESTS ====================", function(){
