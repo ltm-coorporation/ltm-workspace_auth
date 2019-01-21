@@ -17,10 +17,10 @@ chai.use(chaiHttp);
 let app = require('../../src/app');
 let requester = chai.request(app).keepOpen();
 
-describe('-- Using GET to request to api --', function() {
+describe("===================== INTEGRATION TESTS ====================", function(){
+describe('-- Using GET request method to api --', function() {
     // before('', function(){ requester.keepOpen(); });
     // after('', function(){ requester.close(); }); // issue: https://github.com/chaijs/chai-http/issues/189
-
     it('shoud return statusCode = 405 (Client Error)(Method Not Allowed)', function(){
         return requester.get('/')
         .then(res => {
@@ -33,8 +33,9 @@ describe('-- Using GET to request to api --', function() {
     });
 });
 
-describe('-- Using POST to request to api --', function(){
+describe('-- Using POST request method to api --', function(){
     describe('#to route /', function(){
+        
         it('return statusCode = 404 (Client Error)(Not Found)', function(){
             return requester.post('/')
             .then(res => {              
@@ -46,4 +47,5 @@ describe('-- Using POST to request to api --', function(){
             });
         });
     });
-})
+});
+});
