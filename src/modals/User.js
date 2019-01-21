@@ -43,16 +43,7 @@ class User {
 
         
         let dbHandler = new DBHandler();
-        return dbHandler.getDBUser(userObj)
-                .then(res => {
-                        delete res.body._id;
-                        delete res.body._rev;
-                        delete res.body.password_scheme;
-                        delete res.body.iterations;
-                        delete res.body.derived_key;
-                        delete res.body.salt;
-                    return res;
-                })
+        return dbHandler.getDBUser(userObj);                
     }
 
     prepareUserObj(reqObj){
@@ -60,8 +51,8 @@ class User {
         userDataObj.action = reqObj.action;
         userDataObj.username = reqObj.body.username;
         userDataObj.password = reqObj.body.password;
-        userDataObj.profile = reqObj.body.profile || {};
-        userDataObj.config = reqObj.body.config || {};
+        userDataObj.profile = (reqObj.body.profile) ? JSON.parse(reqObj.body.profile) : {};
+        userDataObj.config = (reqObj.body.config) ? JSON.parse(reqObj.body.config) : {};
         return userDataObj;
     }
 }

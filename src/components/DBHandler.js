@@ -15,7 +15,15 @@ class CouchDBHandler{
 
     httpHeaders(key, value){ this.headers[`"${key}"`] = `"${value}`; return this; }
 
-    authUser(dataObj){ this.auth = `${dataObj.name}:${dataObj.password}`; return this; }
+    authUser(dataObj = {}){ 
+        if(Object.keys(dataObj).length == 0){
+            this.auth = process.env.COUCHDB_AUTH;
+        } else {
+            this.auth = `${dataObj.name}:${dataObj.password}`; 
+        }
+        
+        return this; 
+    }
     
     reqPath(path){  this.path = path; return this; }
 
@@ -38,7 +46,16 @@ class CouchDBHandler{
         
         this.httpMethod('GET')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
-        return this.execute();        
+        return this.execute()
+            .then(res => {
+                delete res.body._id;
+                delete res.body._rev;
+                delete res.body.password_scheme;
+                delete res.body.iterations;
+                delete res.body.derived_key;
+                delete res.body.salt;
+            return res;
+        });
     }
 
     updateDBUser(userObj){
@@ -58,7 +75,15 @@ class CouchDBHandler{
             this.httpMethod('PUT')
                 .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`);
 
-            return this.execute(dataObj);
+            return this.execute(dataObj)          
+        })
+        
+        
+        .then(res => {
+            return this.getDBUser(userObj)            
+        })
+        .then(res => { res.statusCode = 201;
+            return res;
         });
     }
 
@@ -75,12 +100,34 @@ class CouchDBHandler{
     }
 
     createDBUser(userObj){        
-        let dataObj = this.prepareDataObj(userObj);        
-        this.httpMethod('PUT')
-            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);
+        let dataObj = this.prepareDataObj(userObj);
+        
+        this.authUser();
 
+        this.httpMethod('GET')
+            .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);
+        
         // creating new user require db admin credentials
-        return this.execute(dataObj);
+        return this.execute(dataObj)
+            .then(res =>{
+                switch(res.statusCode){
+                    case 404: {
+                        this.httpMethod('PUT')
+                        return this.execute(dataObj)
+                    }
+                    case 200: throw { statusCode: 409, message: 'User Exist! Kindly check username and password.'}
+                }
+            })
+        .then(() => {
+                return this.createDBForUser(dataObj);
+            })
+            .then(() => {
+                return this.getDBUser(userObj)            
+            })
+            .then(res => {
+                res.statusCode = 201;
+                return res;
+            });
     }
 
     deleteDBUser(userObj){
@@ -96,6 +143,32 @@ class CouchDBHandler{
                 .reqPath(`/_users/org.couchdb.user:${dataObj.name}?rev=${rev}`);
             return this.execute();
         });
+    }
+
+    createDBForUser(dataObj){
+        
+        this.authUser(); // defaults to couchdb admin
+        
+        this.httpMethod('PUT')
+            .reqPath(`/${dataObj.name}`);
+        
+        return this.execute()
+            .then(res => {
+                if(res.statusCode == 201){
+                    let dbSecurity = {
+                        "admins":{
+                            "names": [`${dataObj.name}`],
+                            "roles": []
+                        },
+                        "members":{ "names": [], "roles": []}
+                    };
+
+                    this.reqPath(`/${dataObj.name}/_security`);
+
+                    return this.execute(dbSecurity);
+                }
+            });
+        
     }
 
     execute(dataObj = {}){
