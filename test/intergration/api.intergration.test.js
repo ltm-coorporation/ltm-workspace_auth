@@ -15,7 +15,7 @@ let deleteUser = require('../config/deleteDBUser.test');
 
 chai.use(chaiHttp);
 let app = require('../../src/app');
-let requester = chai.request('https://ltm-workspace-auth.us-east.mybluemix.net')//.keepOpen();
+let requester = chai.request(app).keepOpen();
 
 describe("===================== INTEGRATION TESTS ====================", function(){
 /**
