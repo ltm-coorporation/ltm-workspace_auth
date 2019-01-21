@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
-    "test": "mocha --recursive test/**/*.test.js --exit",
+
+
+    "test": "mocha $(find test -name '*.test.js') --exit",
     "test-local": "mocha --recursive test/**/*.test.js --watch"
   },
   "keywords": [],
@@ -16,11 +18,8 @@
     "x64",
     "ia32"
   ],
-  "os": [
-    "darwin",
-    "linux",
-    "win32",
-    "win64"
+  "os": [    
+    "linux"
   ],
   "repository": {
     "type": "git",
