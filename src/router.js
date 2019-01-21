@@ -33,7 +33,7 @@ function router(req, res){
 
     promise
     .then(resObj => {
-        res.statusCode = 200;
+        res.statusCode = resObj.statusCode || 200;
         res.write(JSON.stringify(resObj));
     })
     .catch(err => {
