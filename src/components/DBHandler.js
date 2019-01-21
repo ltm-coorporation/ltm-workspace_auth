@@ -77,8 +77,6 @@ class CouchDBHandler{
 
             return this.execute(dataObj)          
         })
-        
-        
         .then(res => {
             return this.getDBUser(userObj)            
         })
@@ -89,6 +87,7 @@ class CouchDBHandler{
 
     prepareDataObj(userObj){
         let dataObj = {}
+        
         dataObj.name = userObj.username;
         dataObj.password = userObj.password;        
         dataObj.type = "user";
