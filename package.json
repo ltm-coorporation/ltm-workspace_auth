@@ -9,7 +9,7 @@
 
 
     "test": "mocha $(find test -name '*.test.js') --exit",
-    "test-local": "mocha --recursive test/**/*.test.js --watch"
+    "test-local": "mocha $(find test -name '*.test.js') --watch"
   },
   "keywords": [],
   "author": "prashant dawar",
