@@ -34,7 +34,7 @@ class CouchDBHandler{
 
         this.authUser(dataObj);
 
-        this.httpMethod('HEAD')
+        this.httpMethod('GET')
             .reqPath(`/_users/org.couchdb.user:${dataObj.name}`);        
         
         return this.execute();        
@@ -55,6 +55,7 @@ class CouchDBHandler{
                 delete res.body.iterations;
                 delete res.body.derived_key;
                 delete res.body.salt;
+                res.body.dbhost = (`http://${this.hostname}`)+ ((this.port) ? `:${this.port}` : '');
             return res;
         });
     }

@@ -1,10 +1,13 @@
 
 let UserRoutes = require('./routes/user');
 let SyncDataRoutes = require('./routes/syncData');
-
 function router(req, res){
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "POST");
 
+    
     let promise = new Promise((resolve ,reject) => {
 
 
@@ -42,7 +45,9 @@ function router(req, res){
         res.statusCode = err.statusCode || 500;
         res.write(JSON.stringify(err));
     })
-    .then(_ => res.end());
+    .then(_ => {        
+        res.end()
+    });
 }
 
 module.exports = router;

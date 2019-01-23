@@ -22,7 +22,7 @@ module.exports = (req, res) => {
             .on('end', () => {
                 
                 body = Buffer.concat(body).toString();                    
-                parsedObj.body = qs.parse(body);
+                parsedObj['body'] = qs.parse(body);
                 return resolve(parsedObj);
             });
     });
