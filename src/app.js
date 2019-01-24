@@ -1,8 +1,8 @@
 
 let router = require('./router');
 let server = require('http').createServer();
-// let hostname = 'localhost';
-let port = process.env.PORT || 3001;
+let hostname = process.env.OPENSHIFT_NODEJS_IP;
+let port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT|| 3001;
 server.on('request', (req, res) => router(req, res))
-.listen(port, () => console.log(`Server is running at PORT: ${port}`));
+.listen(port, hostname,  () => console.log(`Server is running at PORT: ${port}`));
 module.exports = server;
