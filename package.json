@@ -6,8 +6,6 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
-
-
     "test": "mocha $(find test -name '*.test.js') --exit",
     "test-local": "mocha $(find test -name '*.test.js') --watch"
   },
@@ -18,7 +16,7 @@
     "x64",
     "ia32"
   ],
-  "os": [    
+  "os": [
     "linux"
   ],
   "repository": {
